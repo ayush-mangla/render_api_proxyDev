@@ -52,6 +52,9 @@ def _resolve_model(body: dict) -> tuple[dict, str, str]:
     resolved = MODEL_MAP.get(requested, requested)
     body["model"] = resolved
     if "/" in resolved:
+        # Ask OpenRouter to return the real $ cost in the usage object.
+        # For streaming, this also makes the final chunk carry usage+cost.
+        body.setdefault("usage", {"include": True})
         return body, OPENROUTER_BASE, OPENROUTER_API_KEY
     return body, OPENAI_BASE, OPENAI_API_KEY
 
