@@ -61,7 +61,7 @@ def _resolve_model(body: dict) -> tuple[dict, str, str]:
 
 @app.get("/health")
 def health():
-    return {"status": "ok", "service": "iqlytics-llm-proxy"}
+    return {"fast": MODEL_MAP["fast"], "smart": MODEL_MAP["smart"]}
 
 
 @app.post("/v1/chat/completions")
