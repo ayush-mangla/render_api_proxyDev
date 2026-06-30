@@ -30,10 +30,12 @@ def _expand(val: str) -> str:
     return ALIASES.get(val, val)
 
 
-# Resolved once at startup — change FAST_MODEL/SMART_MODEL in Render dashboard
+# Resolved once at startup — change model env vars in Render dashboard
 MODEL_MAP = {
-    "fast":  _expand(os.environ.get("FAST_MODEL", "gpt-4o-mini")),
-    "smart": _expand(os.environ.get("SMART_MODEL", "gpt-4o")),
+    "fast":      _expand(os.environ.get("FAST_MODEL",      "gpt-4o-mini")),
+    "smart":     _expand(os.environ.get("SMART_MODEL",     "gpt-4o")),
+    "reasoning": _expand(os.environ.get("REASONING_MODEL", "gpt-4o")),
+    "cheap":     _expand(os.environ.get("CHEAP_MODEL",     "gpt-4o-mini")),
     **ALIASES,
 }
 
@@ -61,7 +63,12 @@ def _resolve_model(body: dict) -> tuple[dict, str, str]:
 
 @app.get("/health")
 def health():
-    return {"fast": MODEL_MAP["fast"], "smart": MODEL_MAP["smart"]}
+    return {
+        "fast":      MODEL_MAP["fast"],
+        "smart":     MODEL_MAP["smart"],
+        "reasoning": MODEL_MAP["reasoning"],
+        "cheap":     MODEL_MAP["cheap"],
+    }
 
 
 @app.post("/v1/chat/completions")
